@@ -1,0 +1,192 @@
+swagger: '2.0'
+info:
+  description: This is a simple API
+  version: 1.0.0
+  title: Tayi API
+  # put the contact info for your development or API team
+  contact:
+    email: shaun92168@gmail.com
+
+paths:
+  /styrofoam:
+    get:
+      summary: searches styrofoam
+      operationId: app.get_styrofoam
+      description: |
+        By passing in the appropriate options, you can search for
+        available styrofoam
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: width
+        description: pass an optional width value for looking up styrofoam
+        required: false
+        type: integer
+      - in: query
+        name: thickness
+        description: pass an optional thickness value for looking up styrofoam
+        required: false
+        type: integer
+      - in: query
+        name: height
+        description: pass an optional height value for looking up styrofoam
+        required: false
+        type: integer
+      - in: query
+        name: orderNum
+        description: pass an optional order number string for looking up styrofoam
+        type: string
+        required: false
+      responses:
+        200:
+          description: search results matching criteria
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Styrofoam'
+        400:
+          description: bad input parameter
+    post:
+      summary: adds a styrofoam item
+      operationId: app.add_styrofoam
+      description: Adds a styrofoam to the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      parameters:
+        - in: query
+          name: width
+          description: pass an optional width value for looking up styrofoam
+          required: true
+          type: integer
+        - in: query
+          name: thickness
+          description: pass an optional thickness value for looking up styrofoam
+          required: true
+          type: integer
+        - in: query
+          name: height
+          description: pass an optional height value for looking up styrofoam
+          required: true
+          type: integer
+        - in: query
+          name: orderNum
+          description: pass an optional order number string for looking up styrofoam
+          type: string
+          required: true
+      responses:
+        201:
+          description: item created
+        400:
+          description: invalid input, object invalid
+        409:
+          description: an existing item already exists
+
+  /styrofoam/cutFormat:
+    get:
+      summary: get calculated cut format for styrofoam
+      operationId: app.get_cut_format
+      description: |
+        By passing in the appropriate parameter, you can get the calculated cut format for styrofoam
+      produces:
+      - application/json
+      parameters:
+      - in: query
+        name: width
+        description: width value for the styrofoam
+        required: true
+        type: integer
+      - in: query
+        name: thickness
+        description: thickness value for the styrofoam
+        required: true
+        type: integer
+      - in: query
+        name: height
+        description: height value for the styrofoam
+        required: true
+        type: integer
+      - in: query
+        name: amount
+        description: number of pieces to cut
+        required: true
+        type: integer
+      responses:
+        200:
+          description: OK
+        400:
+          description: bad input parameter
+
+  /styrofoam/cutFormats:
+    post:
+      summary: get calculated cut formats for many styrofoams
+      operationId: app.calculate_cut_formats
+      description: |
+        By passing in the appropriate parameter, you can get the calculated cut format for styrofoam
+      produces:
+      - application/json
+      parameters:
+      - in: body
+        name: styrofoamFormats
+        description: list of styrofoam formats
+        required: true
+        schema:
+          $ref: '#/definitions/StyrofoamFormats'
+      responses:
+        200:
+          description: OK
+        400:
+          description: bad input parameter
+
+definitions:
+  Styrofoam:
+    type: object
+    required:
+    - id
+    - orderNumber
+    - width
+    - thickness
+    - height
+    properties:
+      id:
+        type: string
+        format: uuid
+        example: d290f1ee-6c54-4b01-90e6-d701748f0851
+      orderNumber:
+        type: string
+        example: '#Y18S'
+      width:
+        type: integer
+        example: 350
+      thickness:
+        type: integer
+        example: 185
+      height:
+        type: integer
+        example: 30
+  StyrofoamFormats:
+    type: array
+    items:
+      $ref: '#/definitions/StyrofoamFormat'
+  StyrofoamFormat:
+    type: object
+    required:
+    - width
+    - thickness
+    - height
+    - amount
+    properties:
+      width:
+        type: integer
+        example: 350
+      thickness:
+        type: integer
+        example: 185
+      height:
+        type: integer
+        example: 30
+      amount:
+        type: integer
+        example: 396
