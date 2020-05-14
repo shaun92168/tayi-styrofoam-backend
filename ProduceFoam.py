@@ -24,17 +24,20 @@ class ProduceFoam:
         return cut_info
 
     def create_CutFormat(self, full_width, styrofoam_width, styrofoam_thickness, styrofoam_height):
-        cut_info = self.cut(full_width, styrofoam_width, styrofoam_thickness)
-        set = self.number_of_production / cut_info["total_per_set"]
-        lack = self.number_of_production - int(set) * cut_info["total_per_set"]
-        surplus = 0
-        height = styrofoam_height * get_int_set(set)
-        if self.number_of_production % cut_info["total_per_set"] != 0:
-            surplus = int(set + 1) * cut_info["total_per_set"] - self.number_of_production
-        total_volume = full_width * height * THICKNESS
-        leftover_volume = (cut_info["width_leftover"] * THICKNESS + cut_info["thickness_leftover"] * full_width) * height
-        cut_format = CutFormat(get_width(full_width), get_int_set(set), lack, surplus, cut_info["width_leftover"],
-                      cut_info["thickness_leftover"], styrofoam_height, total_volume, leftover_volume, styrofoam_width, cut_info["width_num"], styrofoam_thickness, cut_info["thickness_num"])
+        if styrofoam_width > full_width or styrofoam_thickness > THICKNESS:
+            cut_format = CutFormat(0,0,0,0,0,0,0,0,0,0,0,0,0)
+        else:
+            cut_info = self.cut(full_width, styrofoam_width, styrofoam_thickness)
+            set = self.number_of_production / cut_info["total_per_set"]
+            lack = self.number_of_production - int(set) * cut_info["total_per_set"]
+            surplus = 0
+            height = styrofoam_height * get_int_set(set)
+            if self.number_of_production % cut_info["total_per_set"] != 0:
+                surplus = int(set + 1) * cut_info["total_per_set"] - self.number_of_production
+            total_volume = full_width * height * THICKNESS
+            leftover_volume = (cut_info["width_leftover"] * THICKNESS + cut_info["thickness_leftover"] * full_width) * height
+            cut_format = CutFormat(get_width(full_width), get_int_set(set), lack, surplus, cut_info["width_leftover"],
+                          cut_info["thickness_leftover"], styrofoam_height, total_volume, leftover_volume, styrofoam_width, cut_info["width_num"], styrofoam_thickness, cut_info["thickness_num"])
         return cut_format
 
     def get_optimized_results(self, n):

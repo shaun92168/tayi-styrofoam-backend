@@ -54,7 +54,10 @@ class CutFormat:
         return self.thickness_num
 
     def print_simple(self):
-        width_num = int(self.width*10 / self.styrofoam_width)
-        thickness_num = int(730 / self.styrofoam_thickness)
-        leftover_percent = self.leftover_volume/self.total_volume
-        print('{}x{} {}x{}, {}/{}丸, 多{}, {:.0%}廢料'.format(self.styrofoam_width, width_num, self.styrofoam_thickness, thickness_num, self.width, self.set, self.surplus, leftover_percent))
+        if self.styrofoam_width == 0 or self.styrofoam_thickness == 0 or self.total_volume == 0:
+            print('N/A')
+        else:
+            width_num = int(self.width*10 / self.styrofoam_width)
+            thickness_num = int(730 / self.styrofoam_thickness)
+            leftover_percent = self.leftover_volume/self.total_volume
+            print('{}x{} {}x{}, {}/{}丸, 多{}, {:.0%}廢料'.format(self.styrofoam_width, width_num, self.styrofoam_thickness, thickness_num, self.width, self.set, self.surplus, leftover_percent))
